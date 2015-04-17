@@ -7,17 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#define jsonSourceURLAddress_1 @"http://www.xiren.com/api.php?action=lunbo"
-@interface HomeViewController : UIViewController<NSURLConnectionDataDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
+#import "WebViewController.h"
+@interface HomeViewController : UIViewController<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
-@property (strong,nonatomic) NSMutableData *lookServerResponseData;
 
-@property (readwrite,nonatomic) NSMutableArray *lunboArray;
+@property (strong,nonatomic) WebViewController *webCrtrol;
 @property (strong,nonatomic) UIScrollView *FoucsScrool;
+@property (readwrite,nonatomic) NSMutableArray *ScroolClickAaary; //存储轮播点击跳转的urls
 
 @property (strong,nonatomic) UITableView *ContentListTable;
-@property (strong,nonatomic) NSArray *contetList;
+@property (strong,nonatomic) NSArray *contetList; //TABLE view 储存的标题列表数组
+@property (strong,nonatomic) NSMutableArray *ContentListArray;
 
--(void) scrollview_ADD:(NSArray*)pic_data ReciveArrNum:(NSInteger)num;
+
+#define LunBoAPI_url @"http://www.xiren.com/api.php?action=lunbo"
+#define ListAPI_url @"http://www.xiren.com/api.php?action=listapi"
+#define ScroolViewHeight 200
+
 
 @end

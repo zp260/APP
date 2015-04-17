@@ -33,6 +33,7 @@
 }
 - (void)ControllerInit
 {
+    
     HomeViewController *XirenWebCtrol= [[HomeViewController alloc] init];
     RadioViewController *RadioCtrol = [[RadioViewController alloc] init];
     CarViewController *CarCtrol = [[CarViewController alloc] init];
@@ -64,7 +65,7 @@
     
     UINavigationController *navctrol=[[UINavigationController alloc]initWithRootViewController:TabBar];
     
-    
+    navctrol.title =@"喜人网";
     self.window.rootViewController = navctrol;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
