@@ -65,7 +65,7 @@
     
     UINavigationController *navctrol=[[UINavigationController alloc]initWithRootViewController:TabBar];
     
-    navctrol.title =@"喜人网";
+
     self.window.rootViewController = navctrol;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

@@ -16,10 +16,12 @@
 @implementation HomeViewController
 @synthesize ScroolClickAaary=_ScroolClickAaary;
 @synthesize ContentListArray = _ContentListArray;
+@synthesize webCrtrol =_webCrtrol;
+@synthesize cellImageArray=_cellImageArray;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+
     //初始化网络要用到的全局变量
     [self data_init];
     //初始化SCROLLVIEW
@@ -28,6 +30,8 @@
     [self getOnlineData];
     //处理数据添加到scroolview
     [self.view addSubview:_FoucsScrool];
+    NSLog(@"_ContentListTable  %@", _ContentListTable);
+
     
  
     
@@ -37,7 +41,9 @@
     _ScroolClickAaary = [[NSMutableArray alloc]init];
     _contetList =[[NSArray alloc]init];
     _ContentListArray=[[NSMutableArray alloc]init];
-    _webCrtrol= [[WebViewController alloc]init];
+    _cellImageArray = [[NSMutableArray alloc]init];
+    
+    
 }
 -(void) initScroolView
 {
@@ -85,6 +91,7 @@ if([theclass  isEqual: @"list"])
 {
     _ContentListArray=backarray;
     //NSLog(@"_ContentListArray %@",_ContentListArray);
+    [self cellUIimagevews:_ContentListArray];
     //tableview part。
     [self initContentTableView];
 }
@@ -120,6 +127,20 @@ NSInteger i=0;
         }
 }
 
+//异步加载cell用de图片
+-(void)cellUIimagevews:(NSMutableArray *)ImageArray
+{
+    for (id object in  ImageArray) {
+        NSLog(@"%@",[[object objectForKey:@"data"] class]);
+        NSDictionary *imgDic=[object objectForKey:@"data"];
+    
+
+        NSURL *url =[NSURL URLWithString:[imgDic objectForKey:@"image"]];
+        UIImage *cellIMG=[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+        [_cellImageArray addObject:cellIMG];
+        
+    }
+}
 //添加scrooview元素
 -(void) scrollview_ADD:(NSArray*)pic_data ReciveArrNum:(NSInteger)num clickURL:(NSString *)urlstr
 {
@@ -150,7 +171,7 @@ NSInteger i=0;
 -(void)ScroolViewPicClick:(UITapGestureRecognizer *)sender
 {
     
-    
+    _webCrtrol= [[WebViewController alloc]init];
     _webCrtrol.url =[_ScroolClickAaary objectAtIndex:sender.view.tag];
     //NSLog(@"data is %@",[_ScroolClickAaary objectAtIndex:sender.view.tag]);
     if (sender.numberOfTapsRequired==1) {
@@ -169,6 +190,7 @@ NSInteger i=0;
     _ContentListTable =contentTable;
     
     [self.view addSubview:_ContentListTable];
+    NSLog(@"_ContentListTable  %@", _ContentListTable);
 }
 
 
@@ -186,18 +208,53 @@ NSInteger i=0;
     {
         cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contentListIdentifier];
     }
+    else{
+        //删除cell中的子对象
+        while([cell.contentView.subviews lastObject]!=nil){
+            [(UIView *)[cell.contentView.subviews lastObject] removeFromSuperview];
+            
+            
+        }
+    }
+
     NSUInteger row= indexPath.row;
     
     NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[_ContentListArray objectAtIndex:row]objectForKey:@"data"]];
-    NSLog(@"ContentTitle:%@",[datadic objectForKey:@"title"]);
+    
+    
+    UIImage *FaceIMG=[UIImage imageNamed:@"list_head sculpture"];
+    UIImageView *FaceImgView = [[UIImageView alloc]initWithFrame:CGRectMake(16,5, 39, 39)];
+    FaceImgView.image= FaceIMG;
+//
+//    
 
-
-    //NSArray *ContentUrl = [[NSArray alloc]initWithArray:[data valueForKey:@"title"]];
-    cell.textLabel.text =[datadic objectForKey:@"title"];
-    cell.detailTextLabel.text = @"详细信息";
+    UIImageView *cellImgView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 28, kDeviceWidth-10*2, 168)];
+    cellImgView.image=[_cellImageArray objectAtIndex:row];
+    [cellImgView setContentMode:UIViewContentModeScaleToFill];
+    
+    UILabel *ContentLable = [[UILabel alloc]initWithFrame:CGRectMake(10, Cellheight-32, kDeviceWidth-80, 20)];
+    ContentLable.font = [UIFont fontWithName:@"SimHei Regular" size:25];
+    ContentLable.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7f];
+    ContentLable.text =[datadic objectForKey:@"title"];
+    //NSLog(@"ContentLable is %@,cell.lable is %@",ContentLable,cell.textLabel.text);
+    
+    //UILabel *bglable = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 28)];
+    //bglable.backgroundColor=[UIColor colorWithRed:224.0f/255 green:224.0f/255 blue:224.0f/255 alpha:1];
+    
+    //[cell.contentView addSubview:bglable];
+    [cell.contentView addSubview:ContentLable];
+    [cell.contentView addSubview:cellImgView];
+    [cell.contentView addSubview:FaceImgView];
+    
+    //[cell.contentView.subviews
+    //cell.imageView.image= cellIMG;
+    NSLog(@"cell is %@",cell);
+    
     return cell;
 }
-
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return Cellheight;
+}
 ////TABLEview 代理部分
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -213,12 +270,21 @@ NSInteger i=0;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     NSUInteger row= indexPath.row;
     NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[_ContentListArray objectAtIndex:row]objectForKey:@"data"]];
     NSLog(@"onjec dic %@",[datadic objectForKey:@"url"]);
-    _webCrtrol.url=[datadic objectForKey:@"url"];
+    _webCrtrol= [[WebViewController alloc]init];
+        _webCrtrol.url=[datadic objectForKey:@"url"];
     NSLog(@"_webCrtrol.url %@",[datadic objectForKey:@"url"]);
+    
     [self.navigationController pushViewController:_webCrtrol animated:YES];
+    
+    
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
 }
 

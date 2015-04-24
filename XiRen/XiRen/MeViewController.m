@@ -26,7 +26,7 @@
 }
 -(void)initcontroller
 {
-    
+    NSLog(@"ME  Navigation controller is %@",self.navigationController);
     
 }
 /*

@@ -11,18 +11,19 @@
 @interface HomeViewController : UIViewController<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 
-@property (strong,nonatomic) WebViewController *webCrtrol;
+@property (retain,nonatomic,) WebViewController *webCrtrol;
 @property (strong,nonatomic) UIScrollView *FoucsScrool;
 @property (readwrite,nonatomic) NSMutableArray *ScroolClickAaary; //存储轮播点击跳转的urls
 
 @property (strong,nonatomic) UITableView *ContentListTable;
 @property (strong,nonatomic) NSArray *contetList; //TABLE view 储存的标题列表数组
 @property (strong,nonatomic) NSMutableArray *ContentListArray;
-
+@property (strong,nonatomic) NSMutableArray *cellImageArray;
 
 #define LunBoAPI_url @"http://www.xiren.com/api.php?action=lunbo"
 #define ListAPI_url @"http://www.xiren.com/api.php?action=listapi"
 #define ScroolViewHeight 200
+#define Cellheight  226
 
 
 @end
