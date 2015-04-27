@@ -18,6 +18,7 @@
 @synthesize ContentListArray = _ContentListArray;
 @synthesize webCrtrol =_webCrtrol;
 @synthesize cellImageArray=_cellImageArray;
+@synthesize ScroolCount=_ScroolCount;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -42,7 +43,9 @@
     _contetList =[[NSArray alloc]init];
     _ContentListArray=[[NSMutableArray alloc]init];
     _cellImageArray = [[NSMutableArray alloc]init];
-    
+    _ScroolCount = 0;
+    self.pageControl =[[UIPageControl alloc]init];
+    self.timer = [[NSTimer alloc]init];
     
 }
 -(void) initScroolView
@@ -176,19 +179,23 @@ NSInteger i=0;
     //NSLog(@"data is %@",[_ScroolClickAaary objectAtIndex:sender.view.tag]);
     if (sender.numberOfTapsRequired==1) {
         [self.navigationController pushViewController:_webCrtrol animated:YES];
+        [self removeTimer];
     }
     
 }
 
 -(void) initContentTableView
 {
-    UITableView *contentTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-KNavgationBarHeight) style:UITableViewStylePlain];
+    UITableView *contentTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-KTabarHeight) style:UITableViewStylePlain];
     [contentTable setDelegate:self];
     [contentTable setDataSource:self];
     [contentTable setTableHeaderView:_FoucsScrool];
     contentTable.scrollEnabled=YES;
+
     _ContentListTable =contentTable;
     
+    _ContentListTable.backgroundColor = [UIColor clearColor];
+    _ContentListTable.backgroundView=nil;
     [self.view addSubview:_ContentListTable];
     NSLog(@"_ContentListTable  %@", _ContentListTable);
 }
@@ -223,29 +230,28 @@ NSInteger i=0;
     
     
     UIImage *FaceIMG=[UIImage imageNamed:@"list_head sculpture"];
-    UIImageView *FaceImgView = [[UIImageView alloc]initWithFrame:CGRectMake(16,5, 39, 39)];
+    UIImageView *FaceImgView = [[UIImageView alloc]initWithFrame:CGRectMake(16,16, 39, 39)];
     FaceImgView.image= FaceIMG;
-//
-//    
 
-    UIImageView *cellImgView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 28, kDeviceWidth-10*2, 168)];
+
+    UIImageView *cellImgView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 65, kDeviceWidth-10*2, 150)];
     cellImgView.image=[_cellImageArray objectAtIndex:row];
     [cellImgView setContentMode:UIViewContentModeScaleToFill];
     
-    UILabel *ContentLable = [[UILabel alloc]initWithFrame:CGRectMake(10, Cellheight-32, kDeviceWidth-80, 20)];
-    ContentLable.font = [UIFont fontWithName:@"SimHei Regular" size:25];
+    UILabel *ContentLable = [[UILabel alloc]initWithFrame:CGRectMake(70, 30, kDeviceWidth-80, 35)];
+    ContentLable.font = [UIFont fontWithName:@"Micro YaHei" size:25];
     ContentLable.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7f];
     ContentLable.text =[datadic objectForKey:@"title"];
     //NSLog(@"ContentLable is %@,cell.lable is %@",ContentLable,cell.textLabel.text);
     
-    //UILabel *bglable = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 28)];
-    //bglable.backgroundColor=[UIColor colorWithRed:224.0f/255 green:224.0f/255 blue:224.0f/255 alpha:1];
+    UILabel *bglable = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 30)];
+    bglable.backgroundColor=[UIColor colorWithRed:224.0f/255 green:224.0f/255 blue:224.0f/255 alpha:1];
     
-    //[cell.contentView addSubview:bglable];
+    [cell.contentView addSubview:bglable];
     [cell.contentView addSubview:ContentLable];
     [cell.contentView addSubview:cellImgView];
     [cell.contentView addSubview:FaceImgView];
-    
+    //[cell.contentView setBackgroundColor:[UIColor colorWithRed:224.0f/255 green:224.0f/255 blue:224.0f/255 alpha:1]];
     //[cell.contentView.subviews
     //cell.imageView.image= cellIMG;
     NSLog(@"cell is %@",cell);
@@ -279,15 +285,53 @@ NSInteger i=0;
     NSLog(@"_webCrtrol.url %@",[datadic objectForKey:@"url"]);
     
     [self.navigationController pushViewController:_webCrtrol animated:YES];
+    [self removeTimer];
     
     
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    _FoucsScrool.delegate =self;
+    self.pageControl.numberOfPages=5;
+
+        [self addTimer];
+}
+-(void)nextImage
+{
+    int i=self.pageControl.currentPage;
+    if (i==5-1) {
+        i=-1;
+    }
+    i++;
+    [_FoucsScrool setContentOffset:CGPointMake(i*_FoucsScrool.frame.size.width, -KNavgationBarHeight) animated:YES];
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    
+     //    计算页码
+     //    页码 = (contentoffset.x + scrollView一半宽度)/scrollView宽度
+    self.pageControl.currentPage=(_FoucsScrool.frame.size.width*0.5+_FoucsScrool.contentOffset.x)/_FoucsScrool.frame.size.width;
+    NSLog(@"滚动中,%d",self.pageControl.currentPage);
+}
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+     [self removeTimer];
+}
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+     [self addTimer];
+}
+- (void)addTimer{
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
     
 }
-
+- (void)removeTimer
+{
+     [self.timer invalidate];
+    self.timer=nil;
+}
 /*
 #pragma mark - Navigation
 

@@ -19,10 +19,12 @@
 @property (strong,nonatomic) NSArray *contetList; //TABLE view 储存的标题列表数组
 @property (strong,nonatomic) NSMutableArray *ContentListArray;
 @property (strong,nonatomic) NSMutableArray *cellImageArray;
-
+@property (nonatomic) NSInteger ScroolCount; //返回的轮播josn数据计数
+@property (strong, nonatomic) UIPageControl *pageControl;
+ @property (nonatomic, strong) NSTimer *timer;
 #define LunBoAPI_url @"http://www.xiren.com/api.php?action=lunbo"
 #define ListAPI_url @"http://www.xiren.com/api.php?action=listapi"
-#define ScroolViewHeight 200
+#define ScroolViewHeight 180
 #define Cellheight  226
 
 
