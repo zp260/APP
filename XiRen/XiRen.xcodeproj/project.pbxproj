@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		350EE7DB1AE7526C0011F48D /* list_head sculpture.png in Resources */ = {isa = PBXBuildFile; fileRef = 350EE7D91AE7526C0011F48D /* list_head sculpture.png */; };
-		350EE7DC1AE7526C0011F48D /* list_head sculpture@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 350EE7DA1AE7526C0011F48D /* list_head sculpture@2x.png */; };
+		1F164FEC1AF76679005FDA1F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F164FEB1AF76679005FDA1F /* LoginViewController.m */; };
 		351261EC1AD3E949007EED51 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 351261EB1AD3E949007EED51 /* WebViewController.m */; };
 		3512629E1AD61407007EED51 /* tab_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 351262871AD61407007EED51 /* tab_bg.png */; };
 		3512629F1AD61407007EED51 /* tab_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 351262881AD61407007EED51 /* tab_bg@2x.png */; };
@@ -43,6 +42,8 @@
 		35A72CEC1ACAA6C600F5D8D0 /* CarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A72CEB1ACAA6C600F5D8D0 /* CarViewController.m */; };
 		35A72CF01ACB8BB600F5D8D0 /* FoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A72CEF1ACB8BB600F5D8D0 /* FoodViewController.m */; };
 		35A72CF31ACB8C1D00F5D8D0 /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 35A72CF21ACB8C1D00F5D8D0 /* MeViewController.m */; };
+		35F3773F1AF21FF2008D54A8 /* list_head sculpture.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F3773D1AF21FF2008D54A8 /* list_head sculpture.png */; };
+		35F377401AF21FF2008D54A8 /* list_head sculpture@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35F3773E1AF21FF2008D54A8 /* list_head sculpture@2x.png */; };
 		35FCA2AB1AE0FF5300328986 /* ad in_nav_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 35FCA2A91AE0FF5300328986 /* ad in_nav_back.png */; };
 		35FCA2AC1AE0FF5300328986 /* ad in_nav_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 35FCA2AA1AE0FF5300328986 /* ad in_nav_back@2x.png */; };
 		35FCE1D91AE6527400D40469 /* nav_home.png in Resources */ = {isa = PBXBuildFile; fileRef = 35FCE1D71AE6527400D40469 /* nav_home.png */; };
@@ -63,8 +64,8 @@
 /* Begin PBXFileReference section */
 		02E97AC910BE29703C9D0E0C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		067C70FBF34E97A0DD5A70CC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		350EE7D91AE7526C0011F48D /* list_head sculpture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_head sculpture.png"; path = "../../../../../../Volumes/pics/APP_ICO/喜人app首页_iPhone_assets/列表1（含头像内容）/list_head sculpture.png"; sourceTree = "<group>"; };
-		350EE7DA1AE7526C0011F48D /* list_head sculpture@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_head sculpture@2x.png"; path = "../../../../../../Volumes/pics/APP_ICO/喜人app首页_iPhone_assets/列表1（含头像内容）/list_head sculpture@2x.png"; sourceTree = "<group>"; };
+		1F164FEA1AF76679005FDA1F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		1F164FEB1AF76679005FDA1F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		351261EA1AD3E949007EED51 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		351261EB1AD3E949007EED51 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		351262871AD61407007EED51 /* tab_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_bg.png; sourceTree = "<group>"; };
@@ -112,6 +113,8 @@
 		35A72CEF1ACB8BB600F5D8D0 /* FoodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoodViewController.m; sourceTree = "<group>"; };
 		35A72CF11ACB8C1D00F5D8D0 /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
 		35A72CF21ACB8C1D00F5D8D0 /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
+		35F3773D1AF21FF2008D54A8 /* list_head sculpture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_head sculpture.png"; path = "NavigationItemes/list_head sculpture.png"; sourceTree = "<group>"; };
+		35F3773E1AF21FF2008D54A8 /* list_head sculpture@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_head sculpture@2x.png"; path = "NavigationItemes/list_head sculpture@2x.png"; sourceTree = "<group>"; };
 		35FCA2A91AE0FF5300328986 /* ad in_nav_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ad in_nav_back.png"; sourceTree = "<group>"; };
 		35FCA2AA1AE0FF5300328986 /* ad in_nav_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ad in_nav_back@2x.png"; sourceTree = "<group>"; };
 		35FCE1D71AE6527400D40469 /* nav_home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nav_home.png; sourceTree = "<group>"; };
@@ -208,8 +211,8 @@
 		35A72CBE1ACAA5B700F5D8D0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				350EE7D91AE7526C0011F48D /* list_head sculpture.png */,
-				350EE7DA1AE7526C0011F48D /* list_head sculpture@2x.png */,
+				35F3773D1AF21FF2008D54A8 /* list_head sculpture.png */,
+				35F3773E1AF21FF2008D54A8 /* list_head sculpture@2x.png */,
 				35FCE1D61AE6527400D40469 /* NavigationItemes */,
 				35FCA2A81AE0FF0F00328986 /* Content */,
 				351262861AD61407007EED51 /* TabBarItems */,
@@ -274,6 +277,8 @@
 		35FCE1CF1AE62F3300D40469 /* EXT */ = {
 			isa = PBXGroup;
 			children = (
+				1F164FEA1AF76679005FDA1F /* LoginViewController.h */,
+				1F164FEB1AF76679005FDA1F /* LoginViewController.m */,
 			);
 			name = EXT;
 			sourceTree = "<group>";
@@ -390,19 +395,19 @@
 				35A72CCA1ACAA5B700F5D8D0 /* Main.storyboard in Resources */,
 				351262A21AD61407007EED51 /* tab_home_pre.png in Resources */,
 				351262A11AD61407007EED51 /* tab_home@2x.png in Resources */,
-				350EE7DC1AE7526C0011F48D /* list_head sculpture@2x.png in Resources */,
 				351262B11AD61407007EED51 /* tab_used car@2x.png in Resources */,
 				3512629F1AD61407007EED51 /* tab_bg@2x.png in Resources */,
 				351262A01AD61407007EED51 /* tab_home.png in Resources */,
 				35FCE1D91AE6527400D40469 /* nav_home.png in Resources */,
 				351262B21AD61407007EED51 /* tab_used car_pre.png in Resources */,
 				351262AC1AD61407007EED51 /* tab_shop.png in Resources */,
+				35F3773F1AF21FF2008D54A8 /* list_head sculpture.png in Resources */,
+				35F377401AF21FF2008D54A8 /* list_head sculpture@2x.png in Resources */,
 				351262AF1AD61407007EED51 /* tab_shop_pre@2x.png in Resources */,
 				351262A31AD61407007EED51 /* tab_home_pre@2x.png in Resources */,
 				3512629E1AD61407007EED51 /* tab_bg.png in Resources */,
 				351262AB1AD61407007EED51 /* tab_set_pre@2x.png in Resources */,
 				351262A81AD61407007EED51 /* tab_set.png in Resources */,
-				350EE7DB1AE7526C0011F48D /* list_head sculpture.png in Resources */,
 				351262AD1AD61407007EED51 /* tab_shop@2x.png in Resources */,
 				35FCA2AC1AE0FF5300328986 /* ad in_nav_back@2x.png in Resources */,
 				351262AE1AD61407007EED51 /* tab_shop_pre.png in Resources */,
@@ -471,6 +476,7 @@
 				35A72CEC1ACAA6C600F5D8D0 /* CarViewController.m in Sources */,
 				35A72CC41ACAA5B700F5D8D0 /* AppDelegate.m in Sources */,
 				35A72CC11ACAA5B700F5D8D0 /* main.m in Sources */,
+				1F164FEC1AF76679005FDA1F /* LoginViewController.m in Sources */,
 				351261EC1AD3E949007EED51 /* WebViewController.m in Sources */,
 				35A72CE91ACAA6B900F5D8D0 /* RadioViewController.m in Sources */,
 				35A72CF01ACB8BB600F5D8D0 /* FoodViewController.m in Sources */,

@@ -9,19 +9,28 @@
 #import <UIKit/UIKit.h>
 #import "WebViewController.h"
 @interface HomeViewController : UIViewController<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
+{
+    NSMutableArray *ScroolClickAaary;//存储轮播点击跳转的urls
+    NSMutableArray *ContentListArray;//每个cell的数据存储
+    NSMutableArray *ScroolImageArray;//网络返回的json数据的轮播数据的存储器
+    NSInteger ScroolCount; //返回的轮播josn数据计数
+}
 
 
-@property (retain,nonatomic,) WebViewController *webCrtrol;
+@property (strong,nonatomic,) WebViewController *webCrtrol;
 @property (strong,nonatomic) UIScrollView *FoucsScrool;
-@property (readwrite,nonatomic) NSMutableArray *ScroolClickAaary; //存储轮播点击跳转的urls
+@property (readwrite,nonatomic) NSMutableArray *ScroolClickAaary;
 
 @property (strong,nonatomic) UITableView *ContentListTable;
-@property (strong,nonatomic) NSArray *contetList; //TABLE view 储存的标题列表数组
+@property (strong,nonatomic) NSArray *contetList;
 @property (strong,nonatomic) NSMutableArray *ContentListArray;
 @property (strong,nonatomic) NSMutableArray *cellImageArray;
-@property (nonatomic) NSInteger ScroolCount; //返回的轮播josn数据计数
+
+
+@property (nonatomic) NSInteger ScroolCount;
 @property (strong, nonatomic) UIPageControl *pageControl;
- @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic) NSMutableArray *ScroolImageArray;
 #define LunBoAPI_url @"http://www.xiren.com/api.php?action=lunbo"
 #define ListAPI_url @"http://www.xiren.com/api.php?action=listapi"
 #define ScroolViewHeight 180

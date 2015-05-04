@@ -11,14 +11,19 @@
 
 @interface HomeViewController ()
 
+-(void)ScroolViewPicClick:(UITapGestureRecognizer *)sender;
+
 @end
 
 @implementation HomeViewController
+
 @synthesize ScroolClickAaary=_ScroolClickAaary;
-@synthesize ContentListArray = _ContentListArray;
+@synthesize ContentListArray;
 @synthesize webCrtrol =_webCrtrol;
 @synthesize cellImageArray=_cellImageArray;
 @synthesize ScroolCount=_ScroolCount;
+@synthesize ScroolImageArray;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -33,16 +38,19 @@
     [self.view addSubview:_FoucsScrool];
     NSLog(@"_ContentListTable  %@", _ContentListTable);
 
-    
+    NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for (NSHTTPCookie *cookie in [cookieJar cookies]) {
+        NSLog(@"%@", cookie);
+    }
  
     
 }
 -(void)data_init
 {
     _ScroolClickAaary = [[NSMutableArray alloc]init];
-    _contetList =[[NSArray alloc]init];
-    _ContentListArray=[[NSMutableArray alloc]init];
+    ContentListArray=[[NSMutableArray alloc]init];
     _cellImageArray = [[NSMutableArray alloc]init];
+    ScroolImageArray = [[NSMutableArray alloc]init];
     _ScroolCount = 0;
     self.pageControl =[[UIPageControl alloc]init];
     self.timer = [[NSTimer alloc]init];
@@ -90,47 +98,66 @@
 //处理返回数据
 -(void) func_back_data:(NSMutableArray *)backarray whichone:(NSString *)theclass
 {
-if([theclass  isEqual: @"list"])
-{
-    _ContentListArray=backarray;
-    //NSLog(@"_ContentListArray %@",_ContentListArray);
-    [self cellUIimagevews:_ContentListArray];
-    //tableview part。
-    [self initContentTableView];
-}
-NSInteger i=0;
-    for (id key in backarray)
+    if([theclass  isEqual: @"list"])
+    {
+        ContentListArray=backarray;
+        [self cellUIimagevews:ContentListArray];
+        //tableview part。
+        [self initContentTableView];
+        
+    }
+    if ([theclass isEqual:@"lunbo"]) {
+         [self getScroolImages:backarray];//处理返回轮播数据，打包成轮播图片数组
+        if(ScroolImageArray)
         {
-            
-            //KEY就是传过来的每个轮播数据的数组
-            NSArray *arr1 =[[NSArray alloc]initWithObjects:key, nil];
-            NSArray *data = [[NSArray alloc]initWithArray:[arr1 valueForKey:@"data"]];
-                //{
-                //  "data":
-                //      {
-                //          "url":"http:\/\/www.xiren.com\/11427.html",
-                //          "title":"lunbotitle",
-                //          "image":"http:\/\/www.xiren.com\/attachment\/pushpic\/20150312091313.jpg"
-                //      }
-                //}
-
-            
-            if ([theclass  isEqual: @"lunbo"])
-            {
-                //得到每个轮播的url和pic_path
-                
-                NSArray *PicPath = [[NSArray alloc]initWithArray:[data valueForKey:@"image"]];
-                NSArray *picURL = [[NSArray alloc]initWithArray:[data valueForKey:@"url"]];
-                NSString *picURLstr=[picURL componentsJoinedByString:@""];
-                //NSLog(@"PICPATH数据是%@",PicPath);
-                //添加网络图片到scroolview
-                [self scrollview_ADD:PicPath ReciveArrNum:i clickURL:picURLstr];
-                i++;
+            for (NSInteger i=0;i< [ScroolImageArray count];i++) {
+                [self AddScroolViews:i];
             }
         }
+        
+    }
+//    NSInteger i=0;
+//    for (id key in backarray)
+//        {
+//            
+//            //KEY就是传过来的每个轮播数据的数组
+//            NSArray *arr1 =[[NSArray alloc]initWithObjects:key, nil];
+//            NSArray *data = [[NSArray alloc]initWithArray:[arr1 valueForKey:@"data"]];
+//
+//            
+//            if ([theclass  isEqual: @"lunbo"])
+//            {
+//                //得到每个轮播的url和pic_path
+//                
+//                NSArray *PicPath = [[NSArray alloc]initWithArray:[data valueForKey:@"image"]];
+//                NSArray *picURL = [[NSArray alloc]initWithArray:[data valueForKey:@"url"]];
+//                NSString *picURLstr=[picURL componentsJoinedByString:@""];
+//                //NSLog(@"PICPATH数据是%@",PicPath);
+//                //添加网络图片到scroolview
+//                [self scrollview_ADD:PicPath ReciveArrNum:i clickURL:picURLstr];
+//                i++;
+//            }
+//        }
 }
+-(void)AddScroolViews:(NSInteger)i
+{
+    UITapGestureRecognizer *singleFingerOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ScroolViewPicClick:)];
+    singleFingerOne.numberOfTouchesRequired =1;
+    singleFingerOne.numberOfTapsRequired=1;
+    singleFingerOne.delegate =self;
+    
+    UIImageView *imgview = [[UIImageView alloc]initWithFrame:CGRectMake(0+kDeviceWidth*i, 0, kDeviceWidth, ScroolViewHeight)];
+    imgview.image=[ScroolImageArray objectAtIndex:i];
+    imgview.userInteractionEnabled=YES;
+    imgview.contentMode=UIViewContentModeScaleToFill;
+    [imgview addGestureRecognizer:singleFingerOne];
+    imgview.tag=i;
+    [_FoucsScrool addSubview:imgview];            
+    
+    NSLog(@"imageview is  %@",_FoucsScrool.subviews);
 
-//异步加载cell用de图片
+}
+//异步加载cell用de图片,解决上下滚动的卡顿现象
 -(void)cellUIimagevews:(NSMutableArray *)ImageArray
 {
     for (id object in  ImageArray) {
@@ -142,6 +169,20 @@ NSInteger i=0;
         UIImage *cellIMG=[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
         [_cellImageArray addObject:cellIMG];
         
+    }
+}
+//异步加载ScroolView用de图片,解决上下滚动的卡顿现象
+-(void)getScroolImages:(NSMutableArray *)ImageArray
+{
+        for (id object in  ImageArray) {
+        
+        NSDictionary *imgDic=[object objectForKey:@"data"];
+        
+        [_ScroolClickAaary addObject:[imgDic objectForKey:@"url"]];
+        
+        NSURL *ImgUrl =[NSURL URLWithString:[imgDic objectForKey:@"image"]];
+        UIImage *IMG=[UIImage imageWithData:[NSData dataWithContentsOfURL:ImgUrl]];
+        [ScroolImageArray addObject:IMG];
     }
 }
 //添加scrooview元素
@@ -173,7 +214,6 @@ NSInteger i=0;
 //图片点击事件代理
 -(void)ScroolViewPicClick:(UITapGestureRecognizer *)sender
 {
-    
     _webCrtrol= [[WebViewController alloc]init];
     _webCrtrol.url =[_ScroolClickAaary objectAtIndex:sender.view.tag];
     //NSLog(@"data is %@",[_ScroolClickAaary objectAtIndex:sender.view.tag]);
@@ -226,7 +266,7 @@ NSInteger i=0;
 
     NSUInteger row= indexPath.row;
     
-    NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[_ContentListArray objectAtIndex:row]objectForKey:@"data"]];
+    NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[ContentListArray objectAtIndex:row]objectForKey:@"data"]];
     
     
     UIImage *FaceIMG=[UIImage imageNamed:@"list_head sculpture"];
@@ -268,7 +308,7 @@ NSInteger i=0;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_ContentListArray count];
+    return [ContentListArray count];
 }
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
@@ -278,7 +318,7 @@ NSInteger i=0;
 {
     
     NSUInteger row= indexPath.row;
-    NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[_ContentListArray objectAtIndex:row]objectForKey:@"data"]];
+    NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[ContentListArray objectAtIndex:row]objectForKey:@"data"]];
     NSLog(@"onjec dic %@",[datadic objectForKey:@"url"]);
     _webCrtrol= [[WebViewController alloc]init];
         _webCrtrol.url=[datadic objectForKey:@"url"];
@@ -291,6 +331,8 @@ NSInteger i=0;
 }
 -(void)viewDidAppear:(BOOL)animated
 {
+
+    
     [super viewDidAppear:animated];
     _FoucsScrool.delegate =self;
     self.pageControl.numberOfPages=5;
@@ -299,7 +341,7 @@ NSInteger i=0;
 }
 -(void)nextImage
 {
-    int i=self.pageControl.currentPage;
+    NSInteger i=self.pageControl.currentPage;
     if (i==5-1) {
         i=-1;
     }
