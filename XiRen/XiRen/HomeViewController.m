@@ -38,15 +38,17 @@
     [self.view addSubview:_FoucsScrool];
     NSLog(@"_ContentListTable  %@", _ContentListTable);
 
-    NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    for (NSHTTPCookie *cookie in [cookieJar cookies]) {
-        NSLog(@"%@", cookie);
-    }
+//    NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+//    for (NSHTTPCookie *cookie in [cookieJar cookies]) {
+//        NSLog(@"%@", cookie);
+//    }
  
     
 }
 -(void)data_init
 {
+
+
     _ScroolClickAaary = [[NSMutableArray alloc]init];
     ContentListArray=[[NSMutableArray alloc]init];
     _cellImageArray = [[NSMutableArray alloc]init];

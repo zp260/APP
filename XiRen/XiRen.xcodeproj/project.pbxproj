@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F06F7BB1AFB5A7000961895 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F06F7BA1AFB5A7000961895 /* MBProgressHUD.m */; };
 		1F164FEC1AF76679005FDA1F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F164FEB1AF76679005FDA1F /* LoginViewController.m */; };
 		351261EC1AD3E949007EED51 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 351261EB1AD3E949007EED51 /* WebViewController.m */; };
 		3512629E1AD61407007EED51 /* tab_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 351262871AD61407007EED51 /* tab_bg.png */; };
@@ -64,6 +65,8 @@
 /* Begin PBXFileReference section */
 		02E97AC910BE29703C9D0E0C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		067C70FBF34E97A0DD5A70CC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		1F06F7B91AFB5A7000961895 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		1F06F7BA1AFB5A7000961895 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1F164FEA1AF76679005FDA1F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		1F164FEB1AF76679005FDA1F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		351261EA1AD3E949007EED51 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
@@ -295,6 +298,8 @@
 		651A21A34EAB5C824927A3CA /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				1F06F7B91AFB5A7000961895 /* MBProgressHUD.h */,
+				1F06F7BA1AFB5A7000961895 /* MBProgressHUD.m */,
 				067C70FBF34E97A0DD5A70CC /* Pods.debug.xcconfig */,
 				02E97AC910BE29703C9D0E0C /* Pods.release.xcconfig */,
 			);
@@ -476,6 +481,7 @@
 				35A72CEC1ACAA6C600F5D8D0 /* CarViewController.m in Sources */,
 				35A72CC41ACAA5B700F5D8D0 /* AppDelegate.m in Sources */,
 				35A72CC11ACAA5B700F5D8D0 /* main.m in Sources */,
+				1F06F7BB1AFB5A7000961895 /* MBProgressHUD.m in Sources */,
 				1F164FEC1AF76679005FDA1F /* LoginViewController.m in Sources */,
 				351261EC1AD3E949007EED51 /* WebViewController.m in Sources */,
 				35A72CE91ACAA6B900F5D8D0 /* RadioViewController.m in Sources */,

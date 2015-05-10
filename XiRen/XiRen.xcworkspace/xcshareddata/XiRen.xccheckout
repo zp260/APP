@@ -12,6 +12,8 @@
 	<dict>
 		<key>0993F439C919E9F897FE48734B6A0090231DAE97</key>
 		<string>https://github.com/zp260/APP.git</string>
+		<key>4182765C525509B305166AB949D5935FD5C85212</key>
+		<string>https://github.com/jdg/MBProgressHUD.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>XiRen/XiRen.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>0993F439C919E9F897FE48734B6A0090231DAE97</key>
 		<string>../..</string>
+		<key>4182765C525509B305166AB949D5935FD5C85212</key>
+		<string>../../../MBProgressHUD</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/zp260/APP.git</string>
@@ -28,6 +32,14 @@
 	<string>0993F439C919E9F897FE48734B6A0090231DAE97</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4182765C525509B305166AB949D5935FD5C85212</string>
+			<key>IDESourceControlWCCName</key>
+			<string>MBProgressHUD</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

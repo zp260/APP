@@ -7,63 +7,76 @@
 //
 
 #import "WebViewController.h"
+#import "LoginViewController.h"
 
 @interface WebViewController ()
-
+@property (nonatomic) NSDictionary *webHeaderCookieHeader;
 @end
 
 @implementation WebViewController
 @synthesize url=_url;
+@synthesize UserAgent;
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self newnavbar];
+    
+//    NSHTTPCookieStorage *cookiejar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+//    NSArray *cookieArray = [NSArray arrayWithArray:[cookiejar cookies]];
+//    for (id obj in cookieArray) {
+//        [cookiejar deleteCookie:obj];
+//    }
+
+
+    
+    
+    
     // Do any additional setup after loading the view.
-    //self.navigationItem.title = @"喜人网";
+    self.navigationItem.title = @"喜人网";
+    [self loadUserCookie];
+    [self initUI];
+    [self whatchCookie];
+
+
+}
+-(void)loadUserCookie
+{
+    NSData *userCookieData =[[NSUserDefaults standardUserDefaults] objectForKey:@"userdefaultsCookie"];
+    if ([userCookieData length]) {
+        NSArray *cookies =[NSKeyedUnarchiver unarchiveObjectWithData:userCookieData];
+        _webHeaderCookieHeader= [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+        for (NSHTTPCookie *cookie in  cookies) {
+           
+            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+            
+        }
+    }
+    
+    
+}
+-(void)initUI
+{
+    
+    UIBarButtonItem *rightLoginItem = [[UIBarButtonItem alloc]initWithTitle:@"登陆" style:UIBarButtonItemStyleBordered target:self action:@selector(postSubmit)];
+    self.navigationItem.rightBarButtonItem = rightLoginItem;
     _webView =[[UIWebView alloc] initWithFrame:[[UIScreen mainScreen]bounds]];
     NSURL *urlstr = [[NSURL alloc]initWithString:self.url];
-
-    NSURLRequest *request =[[NSURLRequest alloc] initWithURL:urlstr cachePolicy:1 timeoutInterval:30];
-        //NSURLRequest *request =[NSURLRequest requestWithURL:urlstr];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:urlstr cachePolicy:1 timeoutInterval:30];
+    
+    [request setHTTPShouldHandleCookies:YES];
     
     [_webView loadRequest:request];
     [self.view addSubview:_webView];
-    NSLog(@"Navigation controller is %@",self.navigationController);
+    //获取浏览器头
+    UserAgent=[[NSString alloc]initWithString:[_webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"]];
+    NSLog(@"webview url  is %@",_url);
     
+    
+    UIButton *tabButton = [[UIButton alloc]initWithFrame:CGRectMake(0, kDeviceHeight-KTabarHeight, kDeviceWidth, KTabarHeight)];
+    [tabButton setTitle:@"登陆" forState:UIControlStateNormal];
+    [tabButton setBackgroundColor:[UIColor grayColor]];
+    [tabButton addTarget:self action:@selector(whatchCookie) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:tabButton];
     
 
-}
-
--(void) newnavbar
-{
-    self.navigationController.navigationBar.hidden = NO;
-    
-    UINavigationBar *customNavigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    UIImageView *navigationBarBackgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nav_home.png"]];
-    [customNavigationBar addSubview:navigationBarBackgroundImageView];
-    UINavigationItem *navigationTitle = [[UINavigationItem alloc] initWithTitle:@""];
-    [customNavigationBar pushNavigationItem:navigationTitle animated:NO];
-    
-    
-    [self.view addSubview:customNavigationBar];
-    
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton setBackgroundColor:[UIColor clearColor]];
-    backButton.frame = CGRectMake(0, 0, 80, 40);
-    [backButton setImage:[UIImage imageNamed:@"tab_set_pre.png"] forState:UIControlStateNormal];
-    [backButton setImage:[UIImage imageNamed:@"tab_set.png"] forState:UIControlStateSelected];
-    [backButton addTarget:self action:@selector(backHome) forControlEvents:UIControlEventTouchUpInside];
-    //UINavigationItem *navigatorItem = [TTNavigator navigator].visibleViewController.navigationItem;
-    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    self.navigationItem.leftBarButtonItem = backBarButton;
-}
--(void) backHome
-{
-    [self.navigationController popViewControllerAnimated:YES];
-
-}
-
-- (void)back{
-    [self.navigationController popViewControllerAnimated:YES];
 
 }
 
@@ -73,9 +86,39 @@
 }
 -(void) viewDidDisappear:(BOOL)animated
 {
-    [_webView removeFromSuperview];
+    //[_webView removeFromSuperview];
+}
+-(void) viewDidAppear:(BOOL)animated
+{
+    
 }
 
+-(void)postSubmit
+{
+    LoginViewController *loginviewcontrol=[[LoginViewController alloc] init];
+    loginviewcontrol.UserAgent = UserAgent;
+    [self.navigationController pushViewController:loginviewcontrol animated:YES];
+}
+
+-(void)whatchCookie
+{
+    [_webView reload];
+        //NSArray *cookiesALL =[[NSHTTPCookieStorage sharedHTTPCookieStorage]cookies];
+    NSArray *xirenCookies =[[NSHTTPCookieStorage sharedHTTPCookieStorage]cookiesForURL:[NSURL URLWithString:@"http://www.xiren.com"]];
+    for (NSHTTPCookie *cookie in xirenCookies) {
+        if ([cookie.name isEqualToString:@"0d63c_winduser"])
+        {
+            NSLog(@"%@",cookie);
+        }
+        NSDictionary *dic = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@=%@",[cookie name],[cookie value]] forKey:@"Set-Cookie"];
+        NSURL *url = [NSURL URLWithString:@"http://www.xiren.com"];
+        NSArray *headringCookie = [NSHTTPCookie cookiesWithResponseHeaderFields:dic forURL:url];
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:headringCookie forURL:url mainDocumentURL:nil];
+        
+    }
+    
+    
+}
 /*
 #pragma mark - Navigation
 
