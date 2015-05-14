@@ -31,16 +31,16 @@
 }
 -(void) newnavbar
 {
-    self.navigationController.navigationBar.hidden = YES;
-    
-    UINavigationBar *customNavigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
-    UIImageView *navigationBarBackgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nav_home.png"]];
-    [customNavigationBar addSubview:navigationBarBackgroundImageView];
-    //UINavigationItem *navigationTitle = [[UINavigationItem alloc] initWithTitle:@"22222"];
-    //[customNavigationBar pushNavigationItem:navigationTitle animated:NO];
-
-    
-    [self.view addSubview:customNavigationBar];
+   self.navigationController.navigationBar.hidden = YES;
+//    
+//    UINavigationBar *customNavigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
+//    UIImageView *navigationBarBackgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nav_home.png"]];
+//    [customNavigationBar addSubview:navigationBarBackgroundImageView];
+//    //UINavigationItem *navigationTitle = [[UINavigationItem alloc] initWithTitle:@"22222"];
+////    //[customNavigationBar pushNavigationItem:navigationTitle animated:NO];
+//
+//    
+//    [self.view addSubview:customNavigationBar];
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setBackgroundColor:[UIColor clearColor]];

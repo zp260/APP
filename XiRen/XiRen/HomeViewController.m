@@ -7,10 +7,15 @@
 //
 
 #import "HomeViewController.h"
+#import "WebViewController.h"
 
+#define ZtableviewX 0
+#define ZtableviewY 0 //与navigationbar hight 一样
+#define ZscroolviewX 0
+#define ZscroolviewY 0
 
 @interface HomeViewController ()
-
+@property (strong,nonatomic,) WebViewController *webCrtrol;
 -(void)ScroolViewPicClick:(UITapGestureRecognizer *)sender;
 
 @end
@@ -27,7 +32,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
+    
+    self.navigationItem.title=@"喜人网";
+    
     //初始化网络要用到的全局变量
     [self data_init];
     //初始化SCROLLVIEW
@@ -62,10 +69,11 @@
 {
     
     
-    _FoucsScrool=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, ScroolViewHeight+KNavgationBarHeight)];
+    _FoucsScrool=[[UIScrollView alloc] initWithFrame:CGRectMake(ZscroolviewX, ZscroolviewY, kDeviceWidth, ScroolViewHeight+KNavgationBarHeight)];
     [_FoucsScrool setContentSize:CGSizeMake(kDeviceWidth*5, 0)];
-    [_FoucsScrool setBackgroundColor:[UIColor grayColor]];
+    [_FoucsScrool setBackgroundColor:[UIColor whiteColor]];
     _FoucsScrool.pagingEnabled=YES;
+    
 
 }
 
@@ -118,28 +126,7 @@
         }
         
     }
-//    NSInteger i=0;
-//    for (id key in backarray)
-//        {
-//            
-//            //KEY就是传过来的每个轮播数据的数组
-//            NSArray *arr1 =[[NSArray alloc]initWithObjects:key, nil];
-//            NSArray *data = [[NSArray alloc]initWithArray:[arr1 valueForKey:@"data"]];
-//
-//            
-//            if ([theclass  isEqual: @"lunbo"])
-//            {
-//                //得到每个轮播的url和pic_path
-//                
-//                NSArray *PicPath = [[NSArray alloc]initWithArray:[data valueForKey:@"image"]];
-//                NSArray *picURL = [[NSArray alloc]initWithArray:[data valueForKey:@"url"]];
-//                NSString *picURLstr=[picURL componentsJoinedByString:@""];
-//                //NSLog(@"PICPATH数据是%@",PicPath);
-//                //添加网络图片到scroolview
-//                [self scrollview_ADD:PicPath ReciveArrNum:i clickURL:picURLstr];
-//                i++;
-//            }
-//        }
+
 }
 -(void)AddScroolViews:(NSInteger)i
 {
@@ -148,13 +135,14 @@
     singleFingerOne.numberOfTapsRequired=1;
     singleFingerOne.delegate =self;
     
-    UIImageView *imgview = [[UIImageView alloc]initWithFrame:CGRectMake(0+kDeviceWidth*i, 0, kDeviceWidth, ScroolViewHeight)];
+    UIImageView *imgview = [[UIImageView alloc]initWithFrame:CGRectMake(0+kDeviceWidth*i, ZscroolviewY, kDeviceWidth, ScroolViewHeight)];
     imgview.image=[ScroolImageArray objectAtIndex:i];
     imgview.userInteractionEnabled=YES;
     imgview.contentMode=UIViewContentModeScaleToFill;
     [imgview addGestureRecognizer:singleFingerOne];
     imgview.tag=i;
-    [_FoucsScrool addSubview:imgview];            
+    [_FoucsScrool addSubview:imgview];
+    
     
     NSLog(@"imageview is  %@",_FoucsScrool.subviews);
 
@@ -176,8 +164,9 @@
 //异步加载ScroolView用de图片,解决上下滚动的卡顿现象
 -(void)getScroolImages:(NSMutableArray *)ImageArray
 {
-        for (id object in  ImageArray) {
-        
+    for (id object in  ImageArray)
+    {
+    
         NSDictionary *imgDic=[object objectForKey:@"data"];
         
         [_ScroolClickAaary addObject:[imgDic objectForKey:@"url"]];
@@ -186,31 +175,6 @@
         UIImage *IMG=[UIImage imageWithData:[NSData dataWithContentsOfURL:ImgUrl]];
         [ScroolImageArray addObject:IMG];
     }
-}
-//添加scrooview元素
--(void) scrollview_ADD:(NSArray*)pic_data ReciveArrNum:(NSInteger)num clickURL:(NSString *)urlstr
-{
-    UITapGestureRecognizer *singleFingerOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ScroolViewPicClick:)];
-    singleFingerOne.numberOfTouchesRequired =1;
-    singleFingerOne.numberOfTapsRequired=1;
-    singleFingerOne.delegate =self;
-    
-    
-    [_ScroolClickAaary addObject:urlstr];
-    NSString *PicUrlString =[pic_data objectAtIndex:0];
-    NSURL *url =[NSURL URLWithString:PicUrlString];
-    UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-    if([pic_data count])
-    {
-        UIImageView *imgview = [[UIImageView alloc]initWithFrame:CGRectMake(0+kDeviceWidth*num, 0, kDeviceWidth, ScroolViewHeight)];
-        imgview.image=img;
-        imgview.userInteractionEnabled=YES;
-        imgview.contentMode=UIViewContentModeScaleToFill;
-        [imgview addGestureRecognizer:singleFingerOne];
-        imgview.tag=num;
-        [_FoucsScrool addSubview:imgview];
-    }
-    
 }
 
 //图片点击事件代理
@@ -228,10 +192,12 @@
 
 -(void) initContentTableView
 {
-    UITableView *contentTable=[[UITableView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight-KTabarHeight) style:UITableViewStylePlain];
+    UITableView *contentTable=[[UITableView alloc] initWithFrame:CGRectMake(ZtableviewX, ZtableviewY, kDeviceWidth, kDeviceHeight) style:UITableViewStylePlain];
     [contentTable setDelegate:self];
     [contentTable setDataSource:self];
     [contentTable setTableHeaderView:_FoucsScrool];
+    UIView *headerview = contentTable.tableHeaderView;
+
     contentTable.scrollEnabled=YES;
 
     _ContentListTable =contentTable;
@@ -323,8 +289,9 @@
     NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[ContentListArray objectAtIndex:row]objectForKey:@"data"]];
     NSLog(@"onjec dic %@",[datadic objectForKey:@"url"]);
     _webCrtrol= [[WebViewController alloc]init];
-        _webCrtrol.url=[datadic objectForKey:@"url"];
+    _webCrtrol.url=[datadic objectForKey:@"url"];
     NSLog(@"_webCrtrol.url %@",[datadic objectForKey:@"url"]);
+    NSLog(@"%@",self.navigationController);
     
     [self.navigationController pushViewController:_webCrtrol animated:YES];
     [self removeTimer];
@@ -356,7 +323,7 @@
      //    计算页码
      //    页码 = (contentoffset.x + scrollView一半宽度)/scrollView宽度
     self.pageControl.currentPage=(_FoucsScrool.frame.size.width*0.5+_FoucsScrool.contentOffset.x)/_FoucsScrool.frame.size.width;
-    NSLog(@"滚动中,%d",self.pageControl.currentPage);
+    //NSLog(@"滚动中,%d",self.pageControl.currentPage);
 }
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {

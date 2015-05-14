@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 
 
-@interface WebViewController : UIViewController
+@interface WebViewController : UIViewController<UIWebViewDelegate>
 {
     NSString *UserAgent;
+    UIWebView *XirenWebView;
 }
-@property (strong,nonatomic)UIWebView *webView;
-@property (strong,nonatomic)NSString *url;
-@property (nonatomic) NSString *UserAgent;
+@property (strong,nonatomic)    UIWebView *XirenWebView;
+@property (strong,nonatomic)    NSString *url;
+@property (nonatomic)           NSString *UserAgent;
 @end

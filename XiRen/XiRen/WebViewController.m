@@ -8,32 +8,33 @@
 
 #import "WebViewController.h"
 #import "LoginViewController.h"
+#import "CustNavigationBarViewController.h"
+#import "PostSubjectViewController.h"
+#define PostBtHight 25
 
 @interface WebViewController ()
+
 @property (nonatomic) NSDictionary *webHeaderCookieHeader;
+@property (nonatomic) NSString *FID;
+@property (nonatomic) NSString *Verify;
+@property (nonatomic) NSString *TID;
 @end
 
 @implementation WebViewController
+
 @synthesize url=_url;
 @synthesize UserAgent;
+@synthesize XirenWebView;
+@synthesize FID;
+@synthesize TID;
+@synthesize Verify;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-//    NSHTTPCookieStorage *cookiejar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-//    NSArray *cookieArray = [NSArray arrayWithArray:[cookiejar cookies]];
-//    for (id obj in cookieArray) {
-//        [cookiejar deleteCookie:obj];
-//    }
-
-
-    
-    
-    
     // Do any additional setup after loading the view.
-    self.navigationItem.title = @"喜人网";
+    
     [self loadUserCookie];
     [self initUI];
-    [self whatchCookie];
 
 
 }
@@ -48,33 +49,29 @@
             [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
             
         }
-    }
-    
+    }   
     
 }
 -(void)initUI
 {
     
-    UIBarButtonItem *rightLoginItem = [[UIBarButtonItem alloc]initWithTitle:@"登陆" style:UIBarButtonItemStyleBordered target:self action:@selector(postSubmit)];
-    self.navigationItem.rightBarButtonItem = rightLoginItem;
-    _webView =[[UIWebView alloc] initWithFrame:[[UIScreen mainScreen]bounds]];
+    self.navigationController.title = @"喜人网";
+    
+    
+    XirenWebView =[[UIWebView alloc] initWithFrame:[[UIScreen mainScreen]bounds]];
+    XirenWebView.delegate =self;
+    XirenWebView.scalesPageToFit=YES;
+    
     NSURL *urlstr = [[NSURL alloc]initWithString:self.url];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:urlstr cachePolicy:1 timeoutInterval:30];
-    
     [request setHTTPShouldHandleCookies:YES];
     
-    [_webView loadRequest:request];
-    [self.view addSubview:_webView];
+    [XirenWebView loadRequest:request];
+    [self.view addSubview:XirenWebView];
     //获取浏览器头
-    UserAgent=[[NSString alloc]initWithString:[_webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"]];
+
     NSLog(@"webview url  is %@",_url);
-    
-    
-    UIButton *tabButton = [[UIButton alloc]initWithFrame:CGRectMake(0, kDeviceHeight-KTabarHeight, kDeviceWidth, KTabarHeight)];
-    [tabButton setTitle:@"登陆" forState:UIControlStateNormal];
-    [tabButton setBackgroundColor:[UIColor grayColor]];
-    [tabButton addTarget:self action:@selector(whatchCookie) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:tabButton];
+
     
 
 
@@ -96,27 +93,47 @@
 -(void)postSubmit
 {
     LoginViewController *loginviewcontrol=[[LoginViewController alloc] init];
-    loginviewcontrol.UserAgent = UserAgent;
     [self.navigationController pushViewController:loginviewcontrol animated:YES];
 }
 
--(void)whatchCookie
+-(void)SubjectPost
 {
-    [_webView reload];
-        //NSArray *cookiesALL =[[NSHTTPCookieStorage sharedHTTPCookieStorage]cookies];
-    NSArray *xirenCookies =[[NSHTTPCookieStorage sharedHTTPCookieStorage]cookiesForURL:[NSURL URLWithString:@"http://www.xiren.com"]];
-    for (NSHTTPCookie *cookie in xirenCookies) {
-        if ([cookie.name isEqualToString:@"0d63c_winduser"])
-        {
-            NSLog(@"%@",cookie);
-        }
-        NSDictionary *dic = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@=%@",[cookie name],[cookie value]] forKey:@"Set-Cookie"];
-        NSURL *url = [NSURL URLWithString:@"http://www.xiren.com"];
-        NSArray *headringCookie = [NSHTTPCookie cookiesWithResponseHeaderFields:dic forURL:url];
-        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:headringCookie forURL:url mainDocumentURL:nil];
-        
+    PostSubjectViewController  *postCtrol=[[PostSubjectViewController alloc]init];
+    postCtrol.TID=TID;
+    postCtrol.FID=FID;
+    postCtrol.VerifyCode= Verify;
+    [self.navigationController pushViewController:postCtrol animated:YES];
+}
+-(void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    if (webView.isLoading)
+    {
+        return;
     }
+    else
+    {
+        //页面加载绝对完成有点慢。。。 貌似是BAIDU的 SCRIPT造成的。。。
+        FID= [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByName('fid').item(0).getAttribute('value')"];
+        Verify= [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByName('verify').item(0).getAttribute('value')"];
+        TID= [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByName('tid').item(0).getAttribute('value')"];
+        NSLog(@"fid %@,%@",FID,TID);
+        NSLog(@"Verify %@",Verify);
+        
+        UIBarButtonItem *rightLoginItem = [[UIBarButtonItem alloc]initWithTitle:@"回复" style:UIBarButtonItemStyleBordered target:self action:@selector(SubjectPost)];
+        self.navigationItem.rightBarButtonItem = rightLoginItem;
+        
+        //看看源代码
+        //NSString *jsGetHTMl = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByTagName('html')[0].innerHTML"];
+        //NSLog(@"webview.html is %@",jsGetHTMl);
+    }
+
+}
+-(void)webViewDidStartLoad:(UIWebView *)webView
+{
     
+}
+-(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
     
 }
 /*

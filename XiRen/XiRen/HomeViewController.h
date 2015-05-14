@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WebViewController.h"
+
 @interface HomeViewController : UIViewController<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 {
     NSMutableArray *ScroolClickAaary;//存储轮播点击跳转的urls
@@ -17,7 +17,7 @@
 }
 
 
-@property (strong,nonatomic,) WebViewController *webCrtrol;
+
 @property (strong,nonatomic) UIScrollView *FoucsScrool;
 @property (readwrite,nonatomic) NSMutableArray *ScroolClickAaary;
 

@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1F06F7BB1AFB5A7000961895 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F06F7BA1AFB5A7000961895 /* MBProgressHUD.m */; };
 		1F164FEC1AF76679005FDA1F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F164FEB1AF76679005FDA1F /* LoginViewController.m */; };
+		1FF3EC691B0044AD00F46E0B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF3EC681B0044AD00F46E0B /* RegisterViewController.m */; };
+		1FFBA7831B01DEB800B6511F /* UserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FFBA7821B01DEB800B6511F /* UserAgent.m */; };
+		1FFBA7861B01E1C700B6511F /* PostSubjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FFBA7851B01E1C700B6511F /* PostSubjectViewController.m */; };
 		351261EC1AD3E949007EED51 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 351261EB1AD3E949007EED51 /* WebViewController.m */; };
 		3512629E1AD61407007EED51 /* tab_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 351262871AD61407007EED51 /* tab_bg.png */; };
 		3512629F1AD61407007EED51 /* tab_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 351262881AD61407007EED51 /* tab_bg@2x.png */; };
@@ -69,6 +72,12 @@
 		1F06F7BA1AFB5A7000961895 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1F164FEA1AF76679005FDA1F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		1F164FEB1AF76679005FDA1F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		1FF3EC671B0044AD00F46E0B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		1FF3EC681B0044AD00F46E0B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		1FFBA7811B01DEB800B6511F /* UserAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAgent.h; sourceTree = "<group>"; };
+		1FFBA7821B01DEB800B6511F /* UserAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAgent.m; sourceTree = "<group>"; };
+		1FFBA7841B01E1C700B6511F /* PostSubjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostSubjectViewController.h; sourceTree = "<group>"; };
+		1FFBA7851B01E1C700B6511F /* PostSubjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostSubjectViewController.m; sourceTree = "<group>"; };
 		351261EA1AD3E949007EED51 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		351261EB1AD3E949007EED51 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		351262871AD61407007EED51 /* tab_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_bg.png; sourceTree = "<group>"; };
@@ -197,7 +206,7 @@
 		35A72CBD1ACAA5B700F5D8D0 /* XiRen */ = {
 			isa = PBXGroup;
 			children = (
-				35FCE1CF1AE62F3300D40469 /* EXT */,
+				35FCE1CF1AE62F3300D40469 /* UserController */,
 				35A72CF41ACBC00100F5D8D0 /* DATA */,
 				35A72CED1ACB8B7E00F5D8D0 /* XiRen_Model */,
 				35A72CC21ACAA5B700F5D8D0 /* AppDelegate.h */,
@@ -264,6 +273,8 @@
 		35A72CF41ACBC00100F5D8D0 /* DATA */ = {
 			isa = PBXGroup;
 			children = (
+				1FFBA7811B01DEB800B6511F /* UserAgent.h */,
+				1FFBA7821B01DEB800B6511F /* UserAgent.m */,
 			);
 			name = DATA;
 			sourceTree = "<group>";
@@ -277,13 +288,17 @@
 			name = Content;
 			sourceTree = "<group>";
 		};
-		35FCE1CF1AE62F3300D40469 /* EXT */ = {
+		35FCE1CF1AE62F3300D40469 /* UserController */ = {
 			isa = PBXGroup;
 			children = (
 				1F164FEA1AF76679005FDA1F /* LoginViewController.h */,
 				1F164FEB1AF76679005FDA1F /* LoginViewController.m */,
+				1FF3EC671B0044AD00F46E0B /* RegisterViewController.h */,
+				1FF3EC681B0044AD00F46E0B /* RegisterViewController.m */,
+				1FFBA7841B01E1C700B6511F /* PostSubjectViewController.h */,
+				1FFBA7851B01E1C700B6511F /* PostSubjectViewController.m */,
 			);
-			name = EXT;
+			name = UserController;
 			sourceTree = "<group>";
 		};
 		35FCE1D61AE6527400D40469 /* NavigationItemes */ = {
@@ -482,8 +497,11 @@
 				35A72CC41ACAA5B700F5D8D0 /* AppDelegate.m in Sources */,
 				35A72CC11ACAA5B700F5D8D0 /* main.m in Sources */,
 				1F06F7BB1AFB5A7000961895 /* MBProgressHUD.m in Sources */,
+				1FFBA7861B01E1C700B6511F /* PostSubjectViewController.m in Sources */,
+				1FFBA7831B01DEB800B6511F /* UserAgent.m in Sources */,
 				1F164FEC1AF76679005FDA1F /* LoginViewController.m in Sources */,
 				351261EC1AD3E949007EED51 /* WebViewController.m in Sources */,
+				1FF3EC691B0044AD00F46E0B /* RegisterViewController.m in Sources */,
 				35A72CE91ACAA6B900F5D8D0 /* RadioViewController.m in Sources */,
 				35A72CF01ACB8BB600F5D8D0 /* FoodViewController.m in Sources */,
 				35A72CF31ACB8C1D00F5D8D0 /* MeViewController.m in Sources */,

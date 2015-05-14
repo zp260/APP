@@ -8,6 +8,9 @@
 
 #import "LoginViewController.h"
 #import "MBProgressHUD.h"
+#import "RegisterViewController.h"
+#import "UserAgent.h"
+
 @interface LoginViewController ()
 
 @property (strong,nonatomic) MBProgressHUD *hud;
@@ -22,7 +25,7 @@
 @synthesize userInput;
 @synthesize PasswordInput;
 @synthesize LoginRequestState;
-@synthesize UserAgent;
+@synthesize BrowerUserAgent;
 
 - (void)viewDidLoad
 {
@@ -33,13 +36,20 @@
 //    for (id obj in cookieArray) {
 //        [cookiejar deleteCookie:obj];
 //    }
-    // Do any additional setup after loading the view.
+//    Do any additional setup after loading the view.
     [self initUI];
     
 }
 
 -(void)initUI
 {
+    UIBarButtonItem *rightLoginItem = [[UIBarButtonItem alloc]initWithTitle:@"注册" style:UIBarButtonItemStyleBordered target:self action:@selector(GoToRegsiter)];
+    self.navigationItem.rightBarButtonItem = rightLoginItem;
+    
+    UserAgent *UserAgentCtroller= [[UserAgent alloc]init];
+    BrowerUserAgent =[UserAgentCtroller GetUserAgent];
+
+    
     postUrlstr = @"http://www.xiren.com/login.php";
     userInput =[[UITextField alloc]initWithFrame:CGRectMake((kDeviceWidth-200)/2, 100, 200, 50)];
     userInput.placeholder = @"请输入用户名";
@@ -139,13 +149,13 @@
     manager.responseSerializer.acceptableContentTypes=[NSSet setWithObject:@"text/html"];
     
     
-    [manager.requestSerializer setValue:UserAgent forHTTPHeaderField:@"User-Agent"];
+    [manager.requestSerializer setValue:BrowerUserAgent forHTTPHeaderField:@"User-Agent"];
     //manager.requestSerializer.stringEncoding =enc;
     
     [manager POST:url parameters:paraDic
           success:^(AFHTTPRequestOperation *operation, id responseObject)
     {
-        NSString *RequestCookieSetHeader=[[operation.response allHeaderFields] valueForKey:@"Set-Cookie"];
+        
         NSStringEncoding gbkEncoding =CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
         NSString *pageSource = [[NSString alloc] initWithData:responseObject encoding:gbkEncoding];
         [self CheckRequestState:pageSource];
@@ -186,6 +196,15 @@
     {
         [self Checkpassword:[self getPostParameters] url:postUrlstr];
     }
+    
+}
+
+-(void)GoToRegsiter
+{
+
+    
+    
+    
     
 }
 

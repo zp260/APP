@@ -14,7 +14,7 @@
     NSString *password;
     NSString *postUrlstr;
     NSURL *postUrl;
-    NSString *UserAgent;
+    NSString *BrowerUserAgent;
 }
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *password;
@@ -23,6 +23,6 @@
 @property (strong,nonatomic) UITextField *userInput;
 @property (strong,nonatomic) UITextField *PasswordInput;
 @property (nonatomic) NSArray *LoginRequestState;
-@property (strong,nonatomic) NSString *UserAgent;
+@property (strong,nonatomic) NSString *BrowerUserAgent;
 
 @end
