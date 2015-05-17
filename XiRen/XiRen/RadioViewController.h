@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface RadioViewController : UIViewController
-
+#import <MobileVLCKit/MobileVLCKit.h>
+@interface RadioViewController : UIViewController<VLCMediaPlayerDelegate>
+{
+    VLCMediaPlayer *_mediaplayer;
+}
+-(void)PlayOrStopCtrol;
 @end

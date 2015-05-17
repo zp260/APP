@@ -16,17 +16,17 @@
 #import "RegisterViewController.h"
 
 @interface AppDelegate ()
-
+@property (strong,nonatomic) RadioViewController *RadioCtrol;
 @end
 
 @implementation AppDelegate
-
+@synthesize RadioCtrol;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    //[[UINavigationBar appearance] setBarStyle:UIBarStyleBlack];
+
     
     //初始化子视图控制器
     [self ControllerInit];
@@ -37,7 +37,7 @@
 {
     
     HomeViewController *XirenWebCtrol= [[HomeViewController alloc] init];
-    RadioViewController *RadioCtrol = [[RadioViewController alloc] init];
+    RadioCtrol = [[RadioViewController alloc] init];
     CarViewController *CarCtrol = [[CarViewController alloc] init];
     FoodViewController *foodCtrol=[[FoodViewController alloc] init];
     MeViewController *MeCtrol = [[MeViewController alloc] init];
@@ -60,9 +60,9 @@
     MeCtrol.tabBarItem =MeItem;
     
     UINavigationController *XirenWebNavctrol=[[UINavigationController alloc]initWithRootViewController:XirenWebCtrol];
-    //XirenWebNavctrol.navigationBar.hidden = YES;
+    UINavigationController *RadioNavCtrol=[[UINavigationController alloc]initWithRootViewController:RadioCtrol];
     
-    NSArray *viewcontrollers = @[XirenWebNavctrol,RadioCtrol,CarCtrol,foodCtrol,MeCtrol];
+    NSArray *viewcontrollers = @[RadioNavCtrol,XirenWebNavctrol,CarCtrol,foodCtrol,MeCtrol];
     
     
     UITabBarController *TabBar=[[UITabBarController alloc] init];
@@ -89,8 +89,14 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [[UIApplication sharedApplication]beginBackgroundTaskWithExpirationHandler:nil];
+    [self becomeFirstResponder];
+    
+    
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -103,6 +109,30 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [[UIApplication  sharedApplication] endReceivingRemoteControlEvents];
+    [self resignFirstResponder];
+}
+-(void)remoteControlReceivedWithEvent:(UIEvent *)event{
+    if (event.type ==UIEventTypeRemoteControl) {
+        switch (event.subtype) {
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                
+                [RadioCtrol PlayOrStopCtrol];
+                break;
+             case UIEventSubtypeRemoteControlPlay:
+                [RadioCtrol PlayOrStopCtrol];
+                break;
+                case UIEventSubtypeRemoteControlPause:
+                [RadioCtrol PlayOrStopCtrol];
+                break;
+            default:
+                break;
+        }
+    }
+}
+-(BOOL)canBecomeFirstResponder
+{
+    return YES;
 }
 
 @end
