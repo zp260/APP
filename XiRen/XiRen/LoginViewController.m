@@ -108,7 +108,7 @@
         _hud.labelText = @"登陆成功";
         _hud.removeFromSuperViewOnHide = YES;
         [_hud hide:YES afterDelay:2];
-        int index = [[self.navigationController viewControllers]indexOfObject:self];
+        NSInteger index = [[self.navigationController viewControllers]indexOfObject:self];
         [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:index -1] animated:YES];
         return;
 
@@ -207,6 +207,8 @@
     
     
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

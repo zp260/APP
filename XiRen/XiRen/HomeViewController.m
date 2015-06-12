@@ -190,13 +190,14 @@
     
 }
 
+#pragma mark- init tableview
 -(void) initContentTableView
 {
     UITableView *contentTable=[[UITableView alloc] initWithFrame:CGRectMake(ZtableviewX, ZtableviewY, kDeviceWidth, kDeviceHeight) style:UITableViewStylePlain];
     [contentTable setDelegate:self];
     [contentTable setDataSource:self];
     [contentTable setTableHeaderView:_FoucsScrool];
-    UIView *headerview = contentTable.tableHeaderView;
+
 
     contentTable.scrollEnabled=YES;
 
@@ -214,6 +215,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark-tableview delegate
 //TABLEviewdatasouce 代理部分
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
