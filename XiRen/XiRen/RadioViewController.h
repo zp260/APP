@@ -13,16 +13,10 @@
 #import <XMPPRoster.h>
 #import <XMPPRoomMemoryStorage.h>
 
-@interface RadioViewController : UIViewController<VLCMediaPlayerDelegate,XMPPStreamDelegate,UITableViewDataSource,UITableViewDelegate,XMPPRoomDelegate,XMPPRoomStorage,UITextViewDelegate,UITextFieldDelegate>
+@interface RadioViewController : UIViewController<VLCMediaPlayerDelegate>
 {
     VLCMediaPlayer *_mediaplayer;
 }
-@property (strong,nonatomic)UITableView *ChatMsgTableView;
-@property (strong,nonatomic)UITextField *ChatMsgTextFiled;
-@property (nonatomic,retain)NSString *chatWhitUser;
-@property (nonatomic,strong) XMPPStream *xmppStream;
-@property (strong,nonatomic) XMPPMessage *lastChatMessage;
-
 
 -(void)PlayOrStopCtrol;
 @end

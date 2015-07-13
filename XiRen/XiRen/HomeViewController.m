@@ -1,5 +1,5 @@
 //
-//  HomeViewController.m
+//  CarViewController.m
 //  XiRen
 //
 //  Created by zhuping on 15/3/31.
@@ -7,91 +7,188 @@
 //
 
 #import "HomeViewController.h"
-#import "WebViewController.h"
+#include "XirenCoustNav.h"
+#include "CustomCollectionViewCell.h"
+#include "CustomPicTalkCollectionViewCell.h"
+
+@interface HomeViewController ()
+
+@property (retain,nonatomic) UICollectionView *ContentCollectionView;
+@property (strong,nonatomic) UISegmentedControl *segmentedCtrol;
+@end
+
+@implementation HomeViewController
 
 #define ZtableviewX 0
 #define ZtableviewY 0 //与navigationbar hight 一样
 #define ZscroolviewX 0
 #define ZscroolviewY 0
+#define ScroolViewHeight 180
+#define cellheight 50
 
-@interface HomeViewController ()
-@property (strong,nonatomic,) WebViewController *webCrtrol;
--(void)ScroolViewPicClick:(UITapGestureRecognizer *)sender;
-
-@end
-
-@implementation HomeViewController
-
-@synthesize ScroolClickAaary=_ScroolClickAaary;
-@synthesize ContentListArray;
-@synthesize webCrtrol =_webCrtrol;
-@synthesize cellImageArray=_cellImageArray;
-@synthesize ScroolCount=_ScroolCount;
-@synthesize ScroolImageArray;
-
+@synthesize ContentCollectionView;
+@synthesize segmentedCtrol;
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initUI];
+    [self initColletion];
+    
     // Do any additional setup after loading the view.
-    
-    self.navigationItem.title=@"喜人网";
-    
-    //初始化网络要用到的全局变量
-    [self data_init];
-    //初始化SCROLLVIEW
-    [self initScroolView];
-    //获得网络接口json数据
-    [self getOnlineData];
-    //处理数据添加到scroolview
-    [self.view addSubview:_FoucsScrool];
-    NSLog(@"_ContentListTable  %@", _ContentListTable);
 
-//    NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-//    for (NSHTTPCookie *cookie in [cookieJar cookies]) {
-//        NSLog(@"%@", cookie);
-//    }
- 
+
     
 }
--(void)data_init
+-(void)initColletion
+{
+    float AD_height =150.0f;
+    UICollectionViewFlowLayout *flowLayout= [[UICollectionViewFlowLayout alloc]init];
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    flowLayout.headerReferenceSize = CGSizeMake(kDeviceWidth, AD_height);
+    ContentCollectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, KNavgationBarHeight+25, kDeviceWidth, kDeviceHeight-KNavgationBarHeight-25*2) collectionViewLayout:flowLayout];
+    ContentCollectionView.dataSource=self;
+    ContentCollectionView.delegate=self;
+    ContentCollectionView.backgroundColor = [UIColor whiteColor];
+    
+    //注册CELL
+
+    [ContentCollectionView registerClass:[CustomPicTalkCollectionViewCell class] forCellWithReuseIdentifier:@"cell3"];
+    [ContentCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"ReusableView"];
+    
+    [self.view addSubview:ContentCollectionView];
+}
+-(void)initUI
 {
 
-
-    _ScroolClickAaary = [[NSMutableArray alloc]init];
-    ContentListArray=[[NSMutableArray alloc]init];
-    _cellImageArray = [[NSMutableArray alloc]init];
-    ScroolImageArray = [[NSMutableArray alloc]init];
-    _ScroolCount = 0;
-    self.pageControl =[[UIPageControl alloc]init];
-    self.timer = [[NSTimer alloc]init];
+    
+    
+    XirenCoustNav *CousterNav = [[XirenCoustNav alloc]init];
+    
+    //栏目导航
+    NSArray *segmentedData = [[NSArray alloc]initWithObjects:@"图说",@"视频", nil];
+    segmentedCtrol= [[UISegmentedControl alloc] initWithItems:segmentedData];
+    segmentedCtrol.frame = CGRectMake(0, KNavgationBarHeight, kDeviceWidth, 25);
+    segmentedCtrol.tintColor = [UIColor clearColor];
+    segmentedCtrol.selectedSegmentIndex=0;
+    segmentedCtrol.layer.cornerRadius=1;
+    
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:12],NSFontAttributeName,[UIColor grayColor], NSForegroundColorAttributeName, nil];
+    [segmentedCtrol setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    
+    NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:16],NSForegroundColorAttributeName: [CousterNav getNavTintColor]};
+    [segmentedCtrol setTitleTextAttributes:selectedTextAttributes forState:UIControlStateSelected];//设置文字属性
+    
+            //设置分段控件点击相应事件
+    [segmentedCtrol addTarget:self action:@selector(selected:) forControlEvents:UIControlEventValueChanged];
+    
+    
+    [CousterNav initXirenNav:self TitleView:nil WithTitle:@"喜人网"];
+    
+    [self.view addSubview:segmentedCtrol];
     
 }
--(void) initScroolView
+
+#pragma mark-Collection delegate
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    
-    
-    _FoucsScrool=[[UIScrollView alloc] initWithFrame:CGRectMake(ZscroolviewX, ZscroolviewY, kDeviceWidth, ScroolViewHeight+KNavgationBarHeight)];
-    [_FoucsScrool setContentSize:CGSizeMake(kDeviceWidth*5, 0)];
-    [_FoucsScrool setBackgroundColor:[UIColor whiteColor]];
-    _FoucsScrool.pagingEnabled=YES;
-    
-
+    return 30;
 }
 
--(void) getOnlineData
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    [self AFgetOLdata:LunBoAPI_url whichone:@"lunbo"];
-    [self AFgetOLdata:ListAPI_url whichone:@"list"];
+    return 1;
 }
 
--(void) AFgetOLdata:(NSString *)ApiUrlString whichone:(NSString *)urls
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *identify=[[NSString alloc]init];
+    if (segmentedCtrol.selectedSegmentIndex==0)
+    {
+        identify = @"cell3";
+        
+
+    }
+    else
+    {
+        identify = @"cell";
+    }
+    CustomCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
+    [cell sizeToFit];
+    if(!cell)
+    {
+        NSLog(@"无法创建ColletionCell");
+    }
+    cell.ImgView.image = [UIImage imageNamed:@"home_bg2"];
+    cell.Title.text = @"标题";
+    cell.HitCount.text = @"0000";
+    cell.ReadNum.text = @"0000";
+    return cell;
+}
+//头部AD区域
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"ReusableView" forIndexPath:indexPath];
+    [headerView addSubview:nil];//这里添加头部自定义广告View
+    return headerView;
+}
+
+#pragma mark-UicollectionViewDelegateFlowLayout
+//定义每个UIcolletionview大小
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (segmentedCtrol.selectedSegmentIndex == 0)
+    {
+        return CGSizeMake((kDeviceWidth-20)/3, (kDeviceWidth-20)/3+50);
+    }
+    else
+    {
+        return CGSizeMake((kDeviceWidth-20)/2, (kDeviceWidth-20)/2+50);
+    }
+    
+    
+}
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(0, 5, 5, 5);
+}
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 5;
+}
+
+#pragma mark-Collection Select delegate
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"选择 %ld",(long)indexPath.row);
+}
+
+#pragma mark-segement
+-(void)selected:(id)sender{
+    switch (segmentedCtrol.selectedSegmentIndex) {
+        case 0:
+            [ContentCollectionView registerClass:[CustomPicTalkCollectionViewCell class] forCellWithReuseIdentifier:@"cell3"];
+            break;
+        case 1:
+            [ContentCollectionView registerClass:[CustomCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+            break;
+        default:
+            [ContentCollectionView registerClass:[CustomPicTalkCollectionViewCell class] forCellWithReuseIdentifier:@"cell3"];
+            break;
+    }
+    [ContentCollectionView reloadInputViews];
+    [ContentCollectionView reloadData];
+
+}
+
+#pragma mark-下载网络数据交互部分
+-(void)downLoadApiData:(NSString *)ApiUrlString
 {
     AFHTTPRequestOperationManager *manager=[AFHTTPRequestOperationManager manager];
     
     [manager GET:ApiUrlString parameters:nil
          success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-            //传递返回数据
-             [self func_back_data:responseObject whichone:urls];
+         //传递返回数据
+         
          
          
      }
@@ -102,248 +199,16 @@
          NSLog(@"json:%@",error);
          
      }];
-    
-}
-
-//处理返回数据
--(void) func_back_data:(NSMutableArray *)backarray whichone:(NSString *)theclass
-{
-    if([theclass  isEqual: @"list"])
-    {
-        ContentListArray=backarray;
-        [self cellUIimagevews:ContentListArray];
-        //tableview part。
-        [self initContentTableView];
-        
-    }
-    if ([theclass isEqual:@"lunbo"]) {
-         [self getScroolImages:backarray];//处理返回轮播数据，打包成轮播图片数组
-        if(ScroolImageArray)
-        {
-            for (NSInteger i=0;i< [ScroolImageArray count];i++) {
-                [self AddScroolViews:i];
-            }
-        }
-        
-    }
 
 }
--(void)AddScroolViews:(NSInteger)i
-{
-    UITapGestureRecognizer *singleFingerOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ScroolViewPicClick:)];
-    singleFingerOne.numberOfTouchesRequired =1;
-    singleFingerOne.numberOfTapsRequired=1;
-    singleFingerOne.delegate =self;
-    
-    UIImageView *imgview = [[UIImageView alloc]initWithFrame:CGRectMake(0+kDeviceWidth*i, ZscroolviewY, kDeviceWidth, ScroolViewHeight)];
-    imgview.image=[ScroolImageArray objectAtIndex:i];
-    imgview.userInteractionEnabled=YES;
-    imgview.contentMode=UIViewContentModeScaleToFill;
-    [imgview addGestureRecognizer:singleFingerOne];
-    imgview.tag=i;
-    [_FoucsScrool addSubview:imgview];
-    
-    
-    NSLog(@"imageview is  %@",_FoucsScrool.subviews);
-
-}
-//异步加载cell用de图片,解决上下滚动的卡顿现象
--(void)cellUIimagevews:(NSMutableArray *)ImageArray
-{
-    for (id object in  ImageArray) {
-        NSLog(@"%@",[[object objectForKey:@"data"] class]);
-        NSDictionary *imgDic=[object objectForKey:@"data"];
-    
-
-        NSURL *url =[NSURL URLWithString:[imgDic objectForKey:@"image"]];
-        UIImage *cellIMG=[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-        [_cellImageArray addObject:cellIMG];
-        
-    }
-}
-//异步加载ScroolView用de图片,解决上下滚动的卡顿现象
--(void)getScroolImages:(NSMutableArray *)ImageArray
-{
-    for (id object in  ImageArray)
-    {
-    
-        NSDictionary *imgDic=[object objectForKey:@"data"];
-        
-        [_ScroolClickAaary addObject:[imgDic objectForKey:@"url"]];
-        
-        NSURL *ImgUrl =[NSURL URLWithString:[imgDic objectForKey:@"image"]];
-        UIImage *IMG=[UIImage imageWithData:[NSData dataWithContentsOfURL:ImgUrl]];
-        [ScroolImageArray addObject:IMG];
-    }
-}
-
-//图片点击事件代理
--(void)ScroolViewPicClick:(UITapGestureRecognizer *)sender
-{
-    _webCrtrol= [[WebViewController alloc]init];
-    _webCrtrol.url =[_ScroolClickAaary objectAtIndex:sender.view.tag];
-    //NSLog(@"data is %@",[_ScroolClickAaary objectAtIndex:sender.view.tag]);
-    if (sender.numberOfTapsRequired==1) {
-        [self.navigationController pushViewController:_webCrtrol animated:YES];
-        [self removeTimer];
-    }
-    
-}
-
-#pragma mark- init tableview
--(void) initContentTableView
-{
-    UITableView *contentTable=[[UITableView alloc] initWithFrame:CGRectMake(ZtableviewX, ZtableviewY, kDeviceWidth, kDeviceHeight) style:UITableViewStylePlain];
-    [contentTable setDelegate:self];
-    [contentTable setDataSource:self];
-    [contentTable setTableHeaderView:_FoucsScrool];
-
-
-    contentTable.scrollEnabled=YES;
-
-    _ContentListTable =contentTable;
-    
-    _ContentListTable.backgroundColor = [UIColor clearColor];
-    _ContentListTable.backgroundView=nil;
-    [self.view addSubview:_ContentListTable];
-    NSLog(@"_ContentListTable  %@", _ContentListTable);
-}
-
-
+#pragma mark-system delegate
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark-tableview delegate
-//TABLEviewdatasouce 代理部分
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(void) backHome
 {
-    static NSString *contentListIdentifier= @"XirenContentLIST";
-    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:contentListIdentifier];
-    if (cell ==nil)
-    {
-        cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contentListIdentifier];
-    }
-    else{
-        //删除cell中的子对象
-        while([cell.contentView.subviews lastObject]!=nil){
-            [(UIView *)[cell.contentView.subviews lastObject] removeFromSuperview];
-            
-            
-        }
-    }
-
-    NSUInteger row= indexPath.row;
-    
-    NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[ContentListArray objectAtIndex:row]objectForKey:@"data"]];
-    
-    
-    UIImage *FaceIMG=[UIImage imageNamed:@"list_head sculpture"];
-    UIImageView *FaceImgView = [[UIImageView alloc]initWithFrame:CGRectMake(16,16, 39, 39)];
-    FaceImgView.image= FaceIMG;
-
-
-    UIImageView *cellImgView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 65, kDeviceWidth-10*2, 150)];
-    cellImgView.image=[_cellImageArray objectAtIndex:row];
-    [cellImgView setContentMode:UIViewContentModeScaleToFill];
-    
-    UILabel *ContentLable = [[UILabel alloc]initWithFrame:CGRectMake(70, 30, kDeviceWidth-80, 35)];
-    ContentLable.font = [UIFont fontWithName:@"Micro YaHei" size:25];
-    ContentLable.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7f];
-    ContentLable.text =[datadic objectForKey:@"title"];
-    //NSLog(@"ContentLable is %@,cell.lable is %@",ContentLable,cell.textLabel.text);
-    
-    UILabel *bglable = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, 30)];
-    bglable.backgroundColor=[UIColor colorWithRed:224.0f/255 green:224.0f/255 blue:224.0f/255 alpha:1];
-    
-    [cell.contentView addSubview:bglable];
-    [cell.contentView addSubview:ContentLable];
-    [cell.contentView addSubview:cellImgView];
-    [cell.contentView addSubview:FaceImgView];
-    //[cell.contentView setBackgroundColor:[UIColor colorWithRed:224.0f/255 green:224.0f/255 blue:224.0f/255 alpha:1]];
-    //[cell.contentView.subviews
-    //cell.imageView.image= cellIMG;
-    NSLog(@"cell is %@",cell);
-    
-    return cell;
-}
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return Cellheight;
-}
-////TABLEview 代理部分
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [ContentListArray count];
-}
--(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    NSUInteger row= indexPath.row;
-    NSDictionary *datadic =[[NSDictionary alloc]initWithDictionary:[[ContentListArray objectAtIndex:row]objectForKey:@"data"]];
-    NSLog(@"onjec dic %@",[datadic objectForKey:@"url"]);
-    _webCrtrol= [[WebViewController alloc]init];
-    _webCrtrol.url=[datadic objectForKey:@"url"];
-    NSLog(@"_webCrtrol.url %@",[datadic objectForKey:@"url"]);
-    NSLog(@"%@",self.navigationController);
-    
-    [self.navigationController pushViewController:_webCrtrol animated:YES];
-    [self removeTimer];
-    
-    
-}
--(void)viewDidAppear:(BOOL)animated
-{
-
-    
-    [super viewDidAppear:animated];
-    _FoucsScrool.delegate =self;
-    self.pageControl.numberOfPages=5;
-
-        [self addTimer];
-}
--(void)nextImage
-{
-    NSInteger i=self.pageControl.currentPage;
-    if (i==5-1) {
-        i=-1;
-    }
-    i++;
-    [_FoucsScrool setContentOffset:CGPointMake(i*_FoucsScrool.frame.size.width, -KNavgationBarHeight) animated:YES];
-}
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    
-     //    计算页码
-     //    页码 = (contentoffset.x + scrollView一半宽度)/scrollView宽度
-    self.pageControl.currentPage=(_FoucsScrool.frame.size.width*0.5+_FoucsScrool.contentOffset.x)/_FoucsScrool.frame.size.width;
-    //NSLog(@"滚动中,%d",self.pageControl.currentPage);
-}
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-     [self removeTimer];
-}
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-     [self addTimer];
-}
-- (void)addTimer{
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-    
-}
-- (void)removeTimer
-{
-     [self.timer invalidate];
-    self.timer=nil;
+    NSLog(@"imgood");
 }
 /*
 #pragma mark - Navigation

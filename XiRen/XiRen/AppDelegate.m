@@ -36,19 +36,19 @@
 - (void)ControllerInit
 {
     
-    HomeViewController *XirenWebCtrol= [[HomeViewController alloc] init];
+    CarViewController *XirenWebCtrol= [[CarViewController alloc] init];
     RadioCtrol = [[RadioViewController alloc] init];
-    CarViewController *CarCtrol = [[CarViewController alloc] init];
+    HomeViewController *CarCtrol = [[HomeViewController alloc] init];
     FoodViewController *foodCtrol=[[FoodViewController alloc] init];
     MeViewController *MeCtrol = [[MeViewController alloc] init];
 
     
     
-    UITabBarItem *Xirenitem = [[UITabBarItem alloc]initWithTitle:@"喜人社区" image:[UIImage imageNamed:@"tab_home.png"] selectedImage:[UIImage imageNamed:@"tab_home_pre.png"]];
-    UITabBarItem *RadioItem = [[UITabBarItem alloc]initWithTitle:@"喜人乐播" image:[UIImage imageNamed:@"tab_lebo.png"] selectedImage:[UIImage imageNamed:@"tab_lebo_pre.png"]];
-    UITabBarItem *CarItem = [[UITabBarItem alloc]initWithTitle:@"喜人二手车" image:[UIImage imageNamed:@"tab_used car.png"] selectedImage:[UIImage imageNamed:@"tab_used car_pre.png"]];
-    UITabBarItem *FoodItem = [[UITabBarItem alloc]initWithTitle:@"喜人商城" image:[UIImage imageNamed:@"tab_shop.png"] selectedImage:[UIImage imageNamed:@"tab_shop_pre.png"]];
-    UITabBarItem *MeItem = [[UITabBarItem alloc]initWithTitle:@"设置" image:[UIImage imageNamed:@"tab_set.png"] selectedImage:[UIImage imageNamed:@"tab_set_pre.png"]];
+    UITabBarItem *Xirenitem = [[UITabBarItem alloc]initWithTitle:@"喜人汽车" image:[UIImage imageNamed:@"face"] selectedImage:[UIImage imageNamed:@"face"]];
+    UITabBarItem *RadioItem = [[UITabBarItem alloc]initWithTitle:@"FM961" image:[UIImage imageNamed:@"tab_fm961.png"] selectedImage:[UIImage imageNamed:@"tab_fm961.png"]];
+    UITabBarItem *CarItem = [[UITabBarItem alloc]initWithTitle:@"喜人社区" image:[UIImage imageNamed:@"car"] selectedImage:[UIImage imageNamed:@"car"]];
+    UITabBarItem *FoodItem = [[UITabBarItem alloc]initWithTitle:@"喜人活动" image:[UIImage imageNamed:@"tab_activity"] selectedImage:[UIImage imageNamed:@"tab_activity"]];
+    UITabBarItem *MeItem = [[UITabBarItem alloc]initWithTitle:@"我" image:[UIImage imageNamed:@"tab_me.png"] selectedImage:[UIImage imageNamed:@"tab_me.png"]];
 
     
 
@@ -61,25 +61,24 @@
     
     UINavigationController *XirenWebNavctrol=[[UINavigationController alloc]initWithRootViewController:XirenWebCtrol];
     UINavigationController *RadioNavCtrol=[[UINavigationController alloc]initWithRootViewController:RadioCtrol];
+    UINavigationController *CarNavCtrol=[[UINavigationController alloc]initWithRootViewController:CarCtrol];
     
-    NSArray *viewcontrollers = @[RadioNavCtrol,XirenWebNavctrol,CarCtrol,foodCtrol,MeCtrol];
+    
+    NSArray *viewcontrollers = @[RadioNavCtrol,CarNavCtrol,XirenWebNavctrol,foodCtrol,MeCtrol];
     
     
     UITabBarController *TabBar=[[UITabBarController alloc] init];
     [TabBar setViewControllers:viewcontrollers animated:YES];
     
     [[UITabBarItem appearance]setTitleTextAttributes:@{UITextAttributeFont:[UIFont systemFontOfSize:12]} forState:UIControlStateNormal];
-     [[UITabBarItem appearance]setTitleTextAttributes:@{UITextAttributeFont:[UIFont systemFontOfSize:12],UITextAttributeTextColor:[UIColor colorWithRed:119.0f/255.0f green:136.0f/255.0f blue:153.0f/255.0f alpha:1]} forState:UIControlStateSelected];
-    [[UITabBar appearance]setTintColor:[UIColor colorWithRed:119.0f/255.0f green:136.0f/255.0f blue:153.0f alpha:255.0f]];
-    
-
-//    UINavigationBar *customNavigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 64)];
-//    UIImageView *navigationBarBackgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nav_home.png"]];
-//    [customNavigationBar addSubview:navigationBarBackgroundImageView];
-//    [navctrol.view addSubview:customNavigationBar];
+     [[UITabBarItem appearance]setTitleTextAttributes:@{UITextAttributeFont:[UIFont systemFontOfSize:12],UITextAttributeTextColor:[UIColor colorWithRed:251.0f/255.0f green:87.0f/255.0f blue:49.0f/255.0f alpha:1]} forState:UIControlStateSelected];
+    [[UITabBar appearance]setTintColor:[UIColor colorWithRed:251.0f/255.0f green:87.0f/255.0f blue:49.0f/255.0f alpha:1.0f]];
 
     self.window.rootViewController = TabBar;
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    //[XirenWebCtrol xiren_init];//初始化喜人网网络数据
+    
     [self.window makeKeyAndVisible];
 }
 

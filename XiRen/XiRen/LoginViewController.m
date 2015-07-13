@@ -160,8 +160,6 @@
         NSString *pageSource = [[NSString alloc] initWithData:responseObject encoding:gbkEncoding];
         [self CheckRequestState:pageSource];
         
-        
-        
                     NSLog(@"operation is  %@, sucsess data is %@, HTML Body is %@",operation.response.allHeaderFields,[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies],pageSource);
     }
           failure:^(AFHTTPRequestOperation *operation, NSError *error)
